@@ -271,7 +271,6 @@ open class ResizingTokenField: UIView, UICollectionViewDataSource, UICollectionV
             completion?(true)
             return
         }
-        
         viewModel.isShowingLabelCell = visible
         
         guard isCollectionViewLoaded else {
@@ -391,6 +390,12 @@ open class ResizingTokenField: UIView, UICollectionViewDataSource, UICollectionV
         }
         textField?.text = delegate?.resizingTokenFieldCollapsedTokensText(self)
         
+        if let textMsg = textField?.text {
+            if textMsg.contains("more…"){
+                textField?.textColor = #colorLiteral(red: 0.1411764706, green: 0.4980392157, blue: 0.6235294118, alpha: 1)
+            }
+        }
+        
         let indexPaths = viewModel.toggle(areTokensCollapsed: true)
         removeItems(atIndexPaths: indexPaths, animated: animated, completion: { [weak self] (finished: Bool) in
             guard let self = self else { return }
@@ -406,6 +411,7 @@ open class ResizingTokenField: UIView, UICollectionViewDataSource, UICollectionV
     public func expandTokens(animated: Bool = false, completion: ((_ finished: Bool) -> Void)? = nil) {
         delegate?.resizingTokenField(self, willToggleTokensCollapsed: false)
         textField?.text = nil
+        textField?.textColor = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
         
         let indexPaths = viewModel.toggle(areTokensCollapsed: false)
         insertItems(atIndexPaths: indexPaths, animated: animated, completion: { [weak self] (finished: Bool) in
@@ -417,6 +423,11 @@ open class ResizingTokenField: UIView, UICollectionViewDataSource, UICollectionV
     private func updateCollapsedTextIfNeeded() {
         guard viewModel.areTokensCollapsed else { return }
         textField?.text = delegate?.resizingTokenFieldCollapsedTokensText(self)
+        if let textMsg = textField?.text {
+            if textMsg.contains("more…"){
+                textField?.textColor = #colorLiteral(red: 0.1411764706, green: 0.4980392157, blue: 0.6235294118, alpha: 1)
+            }
+        }
     }
     
     // MARK: - UICollectionViewDataSource
